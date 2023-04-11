@@ -9,23 +9,20 @@ import lombok.experimental.Accessors;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <p>
- * REST API 返回结果
- * </p>
+ * RESTFyl API 响应格式
  *
  * @author chris
- * @since 2022/07/21
  */
 @Data
 @Accessors(chain = true)
 @Builder
 @AllArgsConstructor
-public class ApiResult<T> implements Serializable {
+public class ApiResult implements Serializable {
 
 	@Serial
     private static final long serialVersionUID = 8004487252556526569L;
@@ -38,7 +35,7 @@ public class ApiResult<T> implements Serializable {
     /**
      * 是否成功
      */
-    private boolean success;
+    private Boolean success;
 
     /**
      * 响应消息
@@ -48,79 +45,75 @@ public class ApiResult<T> implements Serializable {
     /**
      * 响应数据
      */
-    private T data;
+    private Object data;
 
     /**
      * 响应时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date time;
+    private LocalDateTime time;
 
     public ApiResult() {
-        time  = new Date();
+        time  = LocalDateTime.now();
     }
 
-    public static ApiResult<Boolean> result(boolean flag){
+    public static ApiResult result(boolean flag){
         if (flag){
             return ok();
         }
         return fail();
     }
 
-    public static ApiResult<Boolean> result(ApiCode apiCode){
+    public static ApiResult result(ApiCode apiCode){
         return result(apiCode,null);
     }
 
-    public static <T> ApiResult<T> result(ApiCode apiCode,T data){
+    public static ApiResult result(ApiCode apiCode,Object data){
         return result(apiCode,null,data);
     }
 
-    public static <T> ApiResult<T> result(ApiCode apiCode,String message,T data){
-        boolean success = false;
-        if (apiCode.getCode() == ApiCode.SUCCESS.getCode()){
-            success = true;
-        }
+    public static ApiResult result(ApiCode apiCode,String message,Object data){
+        boolean success = apiCode.getCode() == ApiCode.SUCCESS.getCode();
         String apiMessage = apiCode.getMessage();
         if (StringUtils.isNotBlank(apiMessage)){
             message = apiMessage;
         }
-        return (ApiResult<T>) ApiResult.builder()
+        return (ApiResult) ApiResult.builder()
                 .code(apiCode.getCode())
                 .message(message)
                 .data(data)
                 .success(success)
-                .time(new Date())
+                .time(LocalDateTime.now())
                 .build();
     }
 
-    public static ApiResult<Boolean> ok(){
+    public static ApiResult ok(){
         return ok(null);
     }
 
-    public static <T> ApiResult<T> ok(T data){
+    public static ApiResult ok(Object data){
         return result(ApiCode.SUCCESS,data);
     }
 
-    public static <T> ApiResult<T> ok(T data,String message){
+    public static ApiResult ok(Object data,String message){
         return result(ApiCode.SUCCESS,message,data);
     }
 
-    public static ApiResult<Map<String,Object>> okMap(String key,Object value){
+    public static ApiResult okMap(String key,Object value){
         Map<String,Object> map = new HashMap<>(1);
         map.put(key,value);
         return ok(map);
     }
 
-    public static ApiResult<Boolean> fail(ApiCode apiCode){
+    public static ApiResult fail(ApiCode apiCode){
         return result(apiCode,null);
     }
 
-    public static ApiResult<String> fail(String message){
+    public static ApiResult fail(String message){
         return result(ApiCode.FAIL,message,null);
 
     }
 
-    public static <T> ApiResult<T> fail(ApiCode apiCode,T data){
+    public static ApiResult fail(ApiCode apiCode,Object data){
         if (ApiCode.SUCCESS == apiCode){
             throw new RuntimeException("失败结果状态码不能为" + ApiCode.SUCCESS.getCode());
         }
@@ -128,20 +121,20 @@ public class ApiResult<T> implements Serializable {
 
     }
 
-    public static  ApiResult<String> fail(Integer errorCode,String message){
-        return new ApiResult<String>()
+    public static  ApiResult fail(Integer errorCode,String message){
+        return new ApiResult()
                 .setSuccess(false)
                 .setCode(errorCode)
                 .setMessage(message);
     }
 
-    public static ApiResult<Map<String,Object>> fail(String key,Object value){
+    public static ApiResult fail(String key,Object value){
         Map<String,Object> map = new HashMap<>(1);
         map.put(key,value);
         return result(ApiCode.FAIL,map);
     }
 
-    public static ApiResult<Boolean> fail() {
+    public static ApiResult fail() {
         return fail(ApiCode.FAIL);
     }
 }
