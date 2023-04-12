@@ -20,17 +20,28 @@ repositories {
 
 ext {
 	set('springCloudVersion', "2022.0.2")
+
+	set('openapiVersion', "2.1.0")
+	set('knife4jVersion', "4.1.0")
+
+	set('mybatisVersion', "3.0.0")
+	set('jansiVersion', "2.4.0")
 }
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.0'
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
-	implementation 'org.fusesource.jansi:jansi:2.4.0'
+	implementation "org.mybatis.spring.boot:mybatis-spring-boot-starter:${mybatisVersion}"
+
+	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${openapiVersion}"
+	implementation "com.github.xiaoymin:knife4j-openapi3-jakarta-spring-boot-starter:${knife4jVersion}"
+
+	implementation "org.fusesource.jansi:jansi:${jansiVersion}"
+
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j'
+
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
