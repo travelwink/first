@@ -25,6 +25,7 @@ ext {
 	set('knife4jVersion', "4.1.0")
 
 	set('mybatisVersion', "3.0.0")
+	set('mybatisPlusVersion', "3.5.3.1")
 	set('jansiVersion', "2.4.0")
 }
 
@@ -32,6 +33,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 	implementation "org.mybatis.spring.boot:mybatis-spring-boot-starter:${mybatisVersion}"
+	implementation "com.baomidou:mybatis-plus-boot-starter:${mybatisPlusVersion}"
 
 	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${openapiVersion}"
 	implementation "com.github.xiaoymin:knife4j-openapi3-jakarta-spring-boot-starter:${knife4jVersion}"
@@ -44,6 +46,8 @@ dependencies {
 
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation(platform('org.junit:junit-bom:5.9.3'))
+	testImplementation('org.junit.jupiter:junit-jupiter')
 }
 
 dependencyManagement {
@@ -54,4 +58,11 @@ dependencyManagement {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+test {
+	useJUnitPlatform()
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
 }
