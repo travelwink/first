@@ -40,6 +40,8 @@ dependencies {
 	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${openapiVersion}"
 	implementation "com.github.xiaoymin:knife4j-openapi3-jakarta-spring-boot-starter:${knife4jVersion}"
 
+	implementation 'com.google.guava:guava:31.1-jre'
+	implementation 'org.apache.commons:commons-collections4:4.4'
 	implementation "org.fusesource.jansi:jansi:${jansiVersion}"
 
 	compileOnly 'org.projectlombok:lombok'

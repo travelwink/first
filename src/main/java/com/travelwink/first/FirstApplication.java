@@ -9,7 +9,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 /**
  * @author chris
  */
-@MapperScan("com.travelwink.first.**.**.mapper")
 @SpringBootApplication
 public class FirstApplication {
 
