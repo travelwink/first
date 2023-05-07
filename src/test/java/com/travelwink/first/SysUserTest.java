@@ -1,6 +1,7 @@
 package com.travelwink.first;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.travelwink.first.common.paginaton.PageInfo;
 import com.travelwink.first.common.paginaton.Paging;
 import com.travelwink.first.system.user.entity.SysUser;
@@ -29,7 +30,7 @@ public class SysUserTest {
     public void testPartition() {
         System.out.println(("----- selectAll method test ------"));
         IPage<SysUser> page =  new PageInfo<>(1,3);
-        PageInfo<SysUser> userPageList = sysUserMapper.selectPageList(page);
+        IPage<SysUser> userPageList = sysUserMapper.selectPageList(page);
         Paging<SysUser> paging = new Paging<>(userPageList);
         List<SysUser> userList = paging.getRecords();
         userList.forEach(System.out::println);

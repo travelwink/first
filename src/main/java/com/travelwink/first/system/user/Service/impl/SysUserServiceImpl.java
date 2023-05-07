@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.travelwink.first.common.paginaton.PageInfo;
+import com.travelwink.first.common.paginaton.Paging;
 import com.travelwink.first.system.user.Service.SysUserService;
 import com.travelwink.first.system.user.entity.SysUser;
 import com.travelwink.first.system.user.mapper.SysUserMapper;
@@ -27,11 +28,7 @@ public class SysUserServiceImpl implements SysUserService {
     private SysUserMapper sysUserMapper;
 
     @Override
-    public PageInfo<SysUser> getPageList(SysUserPageParam sysUserPageParam) {
-        OrderItem item = OrderItem.asc("username");
-        List<OrderItem> orderItems = new ArrayList<>();
-        orderItems.add(item);
-        IPage<SysUser> page = new Page<SysUser>().addOrder(orderItems);
-        return sysUserMapper.selectPageList(page);
+    public Paging<SysUser> getPageList(SysUserPageParam sysUserPageParam) {
+        return null;
     }
 }

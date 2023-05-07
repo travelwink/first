@@ -17,5 +17,5 @@ import java.util.List;
 @Repository
 public interface SysUserMapper extends BaseMapper<SysUser> {
     @Select("SELECT * FROM sys_user")
-    PageInfo<SysUser> selectPageList(IPage<SysUser> page);
+    IPage<SysUser> selectPageList(IPage<SysUser> page);
 }

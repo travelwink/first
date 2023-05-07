@@ -1,5 +1,6 @@
 package com.travelwink.first.system.user.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.travelwink.first.common.entity.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,6 +16,7 @@ import java.io.Serial;
 @EqualsAndHashCode(callSuper = true)
 public class SysUser extends BaseEntity {
 
+    @TableId
     private String id;
 
     private String username;
