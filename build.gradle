@@ -44,6 +44,9 @@ dependencies {
 	implementation 'org.apache.commons:commons-collections4:4.4'
 	implementation "org.fusesource.jansi:jansi:${jansiVersion}"
 
+	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.15.2'
+	implementation 'commons-io:commons-io:2.13.0'
+
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j'
