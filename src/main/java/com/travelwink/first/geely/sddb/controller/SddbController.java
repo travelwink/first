@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,8 +19,8 @@ public class SddbController {
     @Autowired
     private OutputService outputService;
 
-    @GetMapping("/output")
-    public void output(HttpServletResponse response) throws Exception {
-        outputService.output(response);
+    @GetMapping("/output/{id}")
+    public void output(HttpServletResponse response, @PathVariable("id") String projectId) throws Exception {
+        outputService.output(response, projectId);
     }
 }

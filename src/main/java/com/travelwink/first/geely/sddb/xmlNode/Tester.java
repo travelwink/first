@@ -1,8 +1,8 @@
 package com.travelwink.first.geely.sddb.xmlNode;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -10,7 +10,6 @@ import java.util.List;
 
 @Data
 @Accessors(chain = true)
-@JacksonXmlRootElement(localName = "Tester")
 public class Tester {
 
     @JacksonXmlProperty(localName = "Name", isAttribute = true)
@@ -29,6 +28,7 @@ public class Tester {
     private String deltaP2ExternalRequestMax = "1000";
 
     @JacksonXmlElementWrapper(localName = "SessionLayer")
-    private List<Session> session;
+    @JsonProperty("Session")
+    private List<TesterSessionLayerSession> testerSessionLayerSession;
 
 }

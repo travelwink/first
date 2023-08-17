@@ -1,6 +1,10 @@
 package com.travelwink.first.geely.sddb.xmlNode;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
@@ -11,9 +15,14 @@ import java.util.Date;
 
 @Data
 @Accessors(chain = true)
+@TableName("t104_project")
 @JacksonXmlRootElement(localName = "Project")
 @JsonPropertyOrder({"Version","GeneratedAt","GeneratedByDETVersion","ProjectVersion","System"})
 public class Project {
+
+    @JsonIgnore
+    @TableId(type = IdType.ASSIGN_UUID)
+    private String id;
 
     @JacksonXmlProperty(localName = "Name", isAttribute = true)
     private String name;
@@ -32,6 +41,7 @@ public class Project {
     @JacksonXmlProperty(localName = "ProjectVersion")
     private String projectVersion;
 
+    @JacksonXmlProperty(localName = "System")
     private System system;
 
 }

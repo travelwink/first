@@ -5,5 +5,5 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public interface OutputService {
-    void output(HttpServletResponse response) throws IOException;
+    void output(HttpServletResponse response, String projectId) throws IOException;
 }
