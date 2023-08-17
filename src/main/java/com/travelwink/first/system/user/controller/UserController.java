@@ -1,7 +1,7 @@
 package com.travelwink.first.system.user.controller;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.travelwink.first.common.paginaton.PageInfo;
+import com.travelwink.first.common.api.ApiResp;
+import com.travelwink.first.common.paginaton.Paging;
 import com.travelwink.first.system.user.Service.SysUserService;
 import com.travelwink.first.system.user.entity.SysUser;
 import com.travelwink.first.system.user.param.SysUserPageParam;
@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * @author chris
@@ -28,7 +26,8 @@ public class UserController {
     private SysUserService userService;
 
     @PostMapping("/getPageList")
-    public PageInfo<SysUser> getUserPageList(@RequestBody SysUserPageParam sysUserPageParam) {
-        return null;
+    public ApiResp<Paging<SysUser>> getPageList(@RequestBody SysUserPageParam sysUserPageParam) {
+        Paging<SysUser> userPaging = userService.getPageList(sysUserPageParam);
+        return ApiResp.ok(userPaging);
     }
 }

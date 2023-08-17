@@ -17,7 +17,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * 排序列映射
  *
  * @author geekidea
- * @date 2020/3/14
  **/
 @Data
 @Accessors(chain = true)
