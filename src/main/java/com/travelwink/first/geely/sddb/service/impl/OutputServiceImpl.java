@@ -33,6 +33,9 @@ public class OutputServiceImpl implements OutputService {
     @Autowired
     private SwService swService;
 
+    @Autowired
+    private DiagServiceService diagServiceService;
+
     @Override
     public void output(HttpServletResponse response, String projectId) {
         XmlMapper xmlMapper = new XmlMapper();
@@ -85,6 +88,9 @@ public class OutputServiceImpl implements OutputService {
 
                 initTransportLayers(sw);
 
+                initSessionLayers(sw);
+
+                setServices(sw);
 
             });
             ecu.setSw(sws);
@@ -111,11 +117,99 @@ public class OutputServiceImpl implements OutputService {
 
     }
 
+    private void setServices(Sw sw) {
+        List<DiagService> diagServices = diagServiceService.getServices(sw.getId());
+        diagServices.forEach(service -> {
+            // Set Service Connected NRC
+            List<NegativeResponseCode> negativeResponseCodes = negativeResponseCodeService.getReleatedList(service.getId(), sw.getId());
+            service.setNegativeResponseCodes(negativeResponseCodes);
+
+            // Set SubFunction
+            if ("10".equals(service.getId()) ||
+                "11".equals(service.getId()) ||
+                "19".equals(service.getId()) ||
+                "27".equals(service.getId()) ||
+                "2A".equals(service.getId()) ||
+                "2C".equals(service.getId()) ||
+                "3E".equals(service.getId()) ||
+                "85".equals(service.getId())
+            ) {
+                getSubFunctions(sw.getId(), service.getId());
+            }
+
+            // Set Session (Diag Timing Init & Update timing parameter)
+
+
+        });
+        sw.setDiagServices(diagServices);
+    }
+
+    private void getSubFunctions(String diagId, String serviceCode) {
+
+    }
+
+    private static void initSessionLayers(Sw sw) {
+        List<SessionLayerSession> sessionLayers = new ArrayList<>();
+        if (sw.getBusName().contains("Ethernet")) {
+            if ("APP".equals(sw.getType())) {
+                createAppSessionLayerSessions(sessionLayers);
+            } else {
+                createOtherSessionLayerSessions(sessionLayers);
+            }
+        } else if (sw.getBusName().toUpperCase().contains("FLEXRAY")) {
+            if ("APP".equals(sw.getType())) {
+                createAppSessionLayerSessions(sessionLayers);
+            } else {
+                createOtherSessionLayerSessions(sessionLayers);
+            }
+        } else if (sw.getBusName().contains("CAN")) {
+            if ("APP".equals(sw.getType())) {
+                createAppSessionLayerSessions(sessionLayers);
+            } else {
+                createOtherSessionLayerSessions(sessionLayers);
+            }
+        } else if (sw.getBusName().contains("LIN")) {
+            if ("APP".equals(sw.getType())) {
+                createAppSessionLayerSessions(sessionLayers);
+            } else {
+                createOtherSessionLayerSessions(sessionLayers);
+            }
+        }
+        sw.setSessionLayer(sessionLayers);
+    }
+
+    private static void createOtherSessionLayerSessions(List<SessionLayerSession> sessionLayers) {
+        SessionLayerSession session2 = new SessionLayerSession();
+        session2.setId("02")
+                .setName("ProgrammingSession")
+                .setP2ServerMax_default("25")
+                .setDeltaP2Vehicle_multiframe("4970")
+                .setMaxNumberOfDIDsForReadDID("1");
+        sessionLayers.add(session2);
+    }
+
+    private static void createAppSessionLayerSessions(List<SessionLayerSession> sessionLayers) {
+        SessionLayerSession session1 = new SessionLayerSession();
+        session1.setId("01")
+                .setName("DefaultSession")
+                .setP2ServerMax_default("50")
+                .setDeltaP2Vehicle_multiframe("13495")
+                .setMaxNumberOfDIDsForReadDID("10");
+        SessionLayerSession session3 = new SessionLayerSession();
+        session3.setId("03")
+                .setName("ExtendedSession")
+                .setP2ServerMax_default("50")
+                .setDeltaP2Vehicle_multiframe("13495")
+                .setMaxNumberOfDIDsForReadDID("10");
+        sessionLayers.add(session1);
+        sessionLayers.add(session3);
+    }
+
     private static void initTransportLayers(Sw sw) {
         List<TransportLayer> transportLayers = new ArrayList<>();
-        TransportLayer transportLayer = new TransportLayer();
-        List<TransportLayerSession> sessions;
-        if(sw.getBusName().contains("Ethernet")) {
+        if (sw.getBusName().contains("Ethernet")) {
+            TransportLayer transportLayer = new TransportLayer();
+            List<TransportLayerSession> sessions;
             transportLayer.setType("TCP_IP_ETH");
             if ("APP".equals(sw.getType())) {
                 TransportLayerSession transportLayerSession1 = new TransportLayerSession();
@@ -139,7 +233,9 @@ public class OutputServiceImpl implements OutputService {
                 sessions.add(transportLayerSession2);
                 transportLayer.setTransportLayerSessions(sessions);
             }
-        } else if(sw.getBusName().toUpperCase().contains("FLEXRAY")) {
+        } else if (sw.getBusName().toUpperCase().contains("FLEXRAY")) {
+            TransportLayer transportLayer = new TransportLayer();
+            List<TransportLayerSession> sessions;
             transportLayer.setType("Flexray");
             if ("APP".equals(sw.getType())) {
                 TransportLayerSession transportLayerSession1 = new TransportLayerSession();
@@ -184,7 +280,9 @@ public class OutputServiceImpl implements OutputService {
                 sessions.add(transportLayerSession2);
                 transportLayer.setTransportLayerSessions(sessions);
             }
-        } else if(sw.getBusName().contains("CAN")) {
+        } else if (sw.getBusName().contains("CAN")) {
+            TransportLayer transportLayer = new TransportLayer();
+            List<TransportLayerSession> sessions;
             transportLayer.setType("CAN");
             if ("APP".equals(sw.getType())) {
                 TransportLayerSession transportLayerSession1 = new TransportLayerSession();
@@ -226,7 +324,9 @@ public class OutputServiceImpl implements OutputService {
                 sessions.add(transportLayerSession2);
                 transportLayer.setTransportLayerSessions(sessions);
             }
-        } else if(sw.getBusName().contains("LIN")) {
+        } else if (sw.getBusName().contains("LIN")) {
+            TransportLayer transportLayer = new TransportLayer();
+            List<TransportLayerSession> sessions;
             transportLayer.setType("LIN");
             if ("APP".equals(sw.getType())) {
                 TransportLayerSession transportLayerSession1 = new TransportLayerSession();
@@ -261,7 +361,6 @@ public class OutputServiceImpl implements OutputService {
                 transportLayer.setTransportLayerSessions(sessions);
             }
         }
-        transportLayers.add(transportLayer);
         sw.setTransportLayer(transportLayers);
     }
 
@@ -275,13 +374,13 @@ public class OutputServiceImpl implements OutputService {
             DataLinkLayer dataLinkLayer = new DataLinkLayer();
             dataLinkLayer.setType("LIN");
             dataLinkLayer.setLinVersion("21");
-            dataLinkLayer.setBaudRate("");
+            dataLinkLayer.setBaudRate(String.valueOf(Math.round(Double.parseDouble(sw.getBusRate()))));
             dataLinkLayers.add(dataLinkLayer);
         } else if (sw.getBusName().contains("CAN")) {
             DataLinkLayer dataLinkLayer = new DataLinkLayer();
             dataLinkLayer.setType("CAN");
             dataLinkLayer.setAddressFormat(sw.getAddressFormat());
-            dataLinkLayer.setBaudRate("");
+            dataLinkLayer.setBaudRate(String.valueOf(Math.round(Double.parseDouble(sw.getBusRate()))));
             dataLinkLayers.add(dataLinkLayer);
         }
         sw.setDataLinkLayer(dataLinkLayers);

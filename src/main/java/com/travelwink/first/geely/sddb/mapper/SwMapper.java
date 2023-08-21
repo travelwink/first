@@ -9,6 +9,7 @@ import java.util.List;
 public interface SwMapper extends BaseMapper<Sw> {
     @Select("""
             SELECT
+                     t100.id,
                      t100.identifier AS diagnostic_part_number,
                      CONCAT_WS('_',
                              t101.short_name,
@@ -20,6 +21,7 @@ public interface SwMapper extends BaseMapper<Sw> {
                          'APP',
                          t101a.short_name) AS `type`,
                      IF(ISNULL(t123.name), '', t123.name) AS bus_name,
+                     t121.bus_rate,
                      t121.address_size AS address_format,
                      t121.fk_t130_init_timing_id AS timing_init_id
                  FROM

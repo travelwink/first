@@ -1,5 +1,7 @@
 package com.travelwink.first.geely.sddb.xmlNode;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -16,6 +18,10 @@ import java.util.List;
 @TableName("t100_ecu_variant")
 public class Sw {
 
+    @JsonIgnore
+    @TableId(type = IdType.ASSIGN_UUID)
+    private String id;
+
     @JacksonXmlProperty(localName = "DiagnosticPartNumber",isAttribute = true)
     private String diagnosticPartNumber;
 
@@ -27,6 +33,9 @@ public class Sw {
 
     @JsonIgnore
     private String busName;
+
+    @JsonIgnore
+    private String busRate;
 
     @JsonIgnore
     private String addressFormat;
@@ -56,5 +65,15 @@ public class Sw {
 
     @JacksonXmlElementWrapper(localName = "TransportLayers")
     @JsonProperty("TransportLayer")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<TransportLayer> transportLayer;
+
+    @JacksonXmlElementWrapper(localName = "SessionLayers")
+    @JsonProperty("SessionLayer")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private List<SessionLayerSession> sessionLayer;
+
+    @JacksonXmlElementWrapper(localName = "Services")
+    @JsonProperty("Service")
+    private List<DiagService> diagServices;
 }
