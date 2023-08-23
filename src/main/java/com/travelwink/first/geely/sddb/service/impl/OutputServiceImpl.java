@@ -41,7 +41,12 @@ public class OutputServiceImpl implements OutputService {
     private DtcService dtcService;
 
     @Autowired
+    private ResponseItemService responseItemService;
+
+    @Autowired
     private InitValueService initValueService;
+
+
 
     @Override
     public void output(HttpServletResponse response, String projectId) {
@@ -134,6 +139,17 @@ public class OutputServiceImpl implements OutputService {
             if ("19".equals(service.getService())) {
                 List<DTC> dtcs = dtcService.getListByDiagId(sw.getId());
                 service.setDtcs(dtcs);
+
+                List<ResponseItem> statusBits = responseItemService.getStatusBits(sw.getId());
+                ResponseItem responseItem = new ResponseItem();
+                responseItem.setName("AlL counters")
+                        .setInDataType("01")
+                        .setOutDataType("02")
+                        .setOffset("00")
+                        .setSize("01")
+                        .setResultPrecision("00");
+                statusBits.add(responseItem);
+                service.setStatusBits(statusBits);
             }
 
             // Set SubFunction (service have mode )

@@ -1,6 +1,5 @@
 package com.travelwink.first.geely.sddb.xmlNode;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -39,7 +38,7 @@ public class DiagService {
 
     @JacksonXmlElementWrapper(localName = "StatusBits")
     @JsonProperty("ResponseItem")
-    private List<ResponseItem> responseItem;
+    private List<ResponseItem> statusBits;
 
     @JacksonXmlElementWrapper(localName = "Subfunctions")
     @JsonProperty("Subfunction")

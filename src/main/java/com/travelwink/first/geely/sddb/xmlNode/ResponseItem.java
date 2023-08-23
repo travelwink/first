@@ -2,7 +2,11 @@ package com.travelwink.first.geely.sddb.xmlNode;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import lombok.Data;
+import lombok.experimental.Accessors;
 
+@Data
+@Accessors(chain = true)
 public class ResponseItem {
 
     @JacksonXmlProperty(localName = "InDataType", isAttribute = true)
@@ -28,6 +32,7 @@ public class ResponseItem {
     private String id;
 
     @JacksonXmlProperty(localName = "Formula")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String formula;
 
     @JacksonXmlProperty(localName = "CompareValue")
