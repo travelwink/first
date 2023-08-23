@@ -13,14 +13,16 @@ import java.util.List;
 
 @Data
 @Accessors(chain = true)
-@TableName("t110_service_ecu_variant")
 public class DiagService {
 
-    @JacksonXmlProperty(localName = "ID", isAttribute = true)
+    @JsonIgnore
     private String id;
 
+    @JacksonXmlProperty(localName = "ID", isAttribute = true)
+    private String service;
+
     @JacksonXmlProperty(localName = "Name", isAttribute = true)
-    private String name;
+    private String serviceName;
 
     @JsonIgnore
     private String fkT100EcuVariantId;
@@ -30,11 +32,6 @@ public class DiagService {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<NegativeResponseCode> negativeResponseCodes;
 
-    @JacksonXmlElementWrapper(localName = "Subfunctions")
-    @JsonProperty("Subfunction")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private List<SubFunction> subFunctions;
-
     @JacksonXmlElementWrapper(localName = "DTCS")
     @JsonProperty("DTC")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -43,5 +40,18 @@ public class DiagService {
     @JacksonXmlElementWrapper(localName = "StatusBits")
     @JsonProperty("ResponseItem")
     private List<ResponseItem> responseItem;
+
+    @JacksonXmlElementWrapper(localName = "Subfunctions")
+    @JsonProperty("Subfunction")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private List<SubFunction> subFunctions;
+
+    @JacksonXmlElementWrapper(localName = "Sessions")
+    @JsonProperty("Session")
+    private List<Session> sessions;
+
+    @JacksonXmlElementWrapper(localName = "DataParameters")
+    @JsonProperty("DataParameter")
+    private List<DataParameter> dataParameters;
 
 }

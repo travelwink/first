@@ -31,5 +31,6 @@ public class ResponseItem {
     private String formula;
 
     @JacksonXmlProperty(localName = "CompareValue")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String compareValue;
 }

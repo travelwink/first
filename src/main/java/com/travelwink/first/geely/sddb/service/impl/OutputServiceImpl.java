@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
+import com.travelwink.first.geely.sddb.entity.InitValue;
 import com.travelwink.first.geely.sddb.service.*;
 import com.travelwink.first.geely.sddb.xmlNode.*;
 import com.travelwink.first.geely.sddb.xmlNode.System;
@@ -36,6 +37,12 @@ public class OutputServiceImpl implements OutputService {
     @Autowired
     private DiagServiceService diagServiceService;
 
+    @Autowired
+    private DtcService dtcService;
+
+    @Autowired
+    private InitValueService initValueService;
+
     @Override
     public void output(HttpServletResponse response, String projectId) {
         XmlMapper xmlMapper = new XmlMapper();
@@ -47,7 +54,6 @@ public class OutputServiceImpl implements OutputService {
         System system = new System();
         List<NegativeResponseCode> nrc = negativeResponseCodeService.list();
         system.setNegativeResponseCode(nrc);
-
 
         // Tester start
         Tester tester = new Tester();
@@ -121,31 +127,167 @@ public class OutputServiceImpl implements OutputService {
         List<DiagService> diagServices = diagServiceService.getServices(sw.getId());
         diagServices.forEach(service -> {
             // Set Service Connected NRC
-            List<NegativeResponseCode> negativeResponseCodes = negativeResponseCodeService.getReleatedList(service.getId(), sw.getId());
+            List<NegativeResponseCode> negativeResponseCodes = negativeResponseCodeService.getReleatedList(service.getService(), sw.getId());
             service.setNegativeResponseCodes(negativeResponseCodes);
 
-            // Set SubFunction
-            if ("10".equals(service.getId()) ||
-                "11".equals(service.getId()) ||
-                "19".equals(service.getId()) ||
-                "27".equals(service.getId()) ||
-                "2A".equals(service.getId()) ||
-                "2C".equals(service.getId()) ||
-                "3E".equals(service.getId()) ||
-                "85".equals(service.getId())
-            ) {
-                getSubFunctions(sw.getId(), service.getId());
+            // Set DTC & StatusBits
+            if ("19".equals(service.getService())) {
+                List<DTC> dtcs = dtcService.getListByDiagId(sw.getId());
+                service.setDtcs(dtcs);
             }
 
-            // Set Session (Diag Timing Init & Update timing parameter)
+            // Set SubFunction (service have mode )
+            if ("10".equals(service.getService()) ||
+                    "11".equals(service.getService()) ||
+                    "19".equals(service.getService()) ||
+                    "27".equals(service.getService()) ||
+                    "2A".equals(service.getService()) ||
+                    "2C".equals(service.getService()) ||
+                    "3E".equals(service.getService()) ||
+                    "85".equals(service.getService())
+            ) {
+                List<SubFunction> subFunctions = getSubFunctions(sw, service.getService());
+                service.setSubFunctions(subFunctions);
+            }
 
+            // Set not SubFunction (service have no mode)
+            if ("14".equals(service.getService()) ||
+                    "22".equals(service.getService()) ||
+                    "27".equals(service.getService()) ||
+                    "2E".equals(service.getService()) ||
+                    "2F".equals(service.getService()) ||
+                    "34".equals(service.getService()) ||
+                    "35".equals(service.getService()) ||
+                    "36".equals(service.getService()) ||
+                    "37".equals(service.getService()) ||
+                    "3D".equals(service.getService())
+            ) {
+                // add Session
+                List<SubFunction> subFunctions = getSubFunctions(sw, service.getService());
+                service.setSessions(subFunctions.get(0).getSessions());
+
+                // add DataParameter
+                if ("14".equals(service.getService()) ||
+                        "23".equals(service.getService()) ||
+                        "27".equals(service.getService()) ||
+                        "34".equals(service.getService()) ||
+                        "35".equals(service.getService()) ||
+                        "36".equals(service.getService()) ||
+                        "3D".equals(service.getService())
+                ) {
+                    List<DataParameter> dataParameters = new ArrayList<>();
+                    dataParameters.add(new DataParameter());
+                    service.setDataParameters(dataParameters);
+                }
+
+                // add DataIdentifiers
+                if (
+                        "22".equals(service.getService()) ||
+                                "27".equals(service.getService()) ||
+                                "2E".equals(service.getService()) ||
+                                "2F".equals(service.getService())
+                ) {
+                    List<DataIdentifier> dataIdentifiers = null;
+                }
+            }
 
         });
         sw.setDiagServices(diagServices);
     }
 
-    private void getSubFunctions(String diagId, String serviceCode) {
+    private List<SubFunction> getSubFunctions(Sw sw, String serviceCode) {
+        List<SubFunction> subFunctions = diagServiceService.getSubFunctions(sw.getId(), serviceCode);
 
+        // contain session service
+        if ("10".equals(serviceCode) ||
+                "14".equals(serviceCode) ||
+                "19".equals(serviceCode) ||
+                "22".equals(serviceCode) ||
+                "23".equals(serviceCode) ||
+                "27".equals(serviceCode) ||
+                "2A".equals(serviceCode) ||
+                "2C".equals(serviceCode) ||
+                "2E".equals(serviceCode) ||
+                "34".equals(serviceCode) ||
+                "35".equals(serviceCode) ||
+                "36".equals(serviceCode) ||
+                "37".equals(serviceCode) ||
+                "3D".equals(serviceCode) ||
+                "3E".equals(serviceCode) ||
+                "85".equals(serviceCode)
+        ) {
+            subFunctions.forEach(subFunction -> {
+                List<Session> sessions = getSessions(sw, subFunction);
+                subFunction.setSessions(sessions);
+            });
+
+        }
+
+        // contain DataParameters service
+        if ("27".equals(serviceCode)) {
+
+        }
+
+        // contain DataIdentifiers service
+        if ("19".equals(serviceCode)
+        ) {
+            subFunctions.forEach(subFunction -> {
+                if ("02".equals(subFunction.getMode()) ||
+                        "03".equals(subFunction.getMode()) ||
+                        "04".equals(subFunction.getMode()) ||
+                        "06".equals(subFunction.getMode()) ||
+                        "0A".equals(subFunction.getMode()) ||
+                        "15".equals(subFunction.getMode())
+                ) {
+
+                }
+            });
+        }
+        if ("27".equals(serviceCode) ||
+                "2A".equals(serviceCode) ||
+                "2C".equals(serviceCode)) {
+        }
+
+
+        return subFunctions;
+    }
+
+    private List<Session> getSessions(Sw sw, SubFunction subFunction) {
+        List<Session> sessions = diagServiceService.getSubFunctionSessions(subFunction.getId());
+        // Set Session (Diag Timing Init & Update timing parameter)
+        sessions.forEach(session -> {
+            if (StringUtils.hasLength(sw.getTimingInitId())) {
+                List<InitValue> values = swService.getInitValue(sw.getTimingInitId());
+                values.forEach(initValue -> {
+                    if ("P2Server_Max".equals(initValue.getName())) {
+                        session.setP2ServerMax(initValue.getInitValue());
+                    }
+                });
+            }
+            if (!StringUtils.hasLength(session.getP2ServerMax())) {
+                session.setP2ServerMax("50");
+            }
+            if (StringUtils.hasLength(subFunction.getFkT130InitTimingService())) {
+                List<InitValue> initValues = initValueService.getValueByInitId(subFunction.getFkT130InitTimingService());
+                session.setP4ServerMax(initValues.get(0).getInitValue());
+            } else if (StringUtils.hasLength(subFunction.getFkTInit130TimingServiceDefault())) {
+                List<InitValue> initValues = initValueService.getValueByInitId(subFunction.getFkTInit130TimingServiceDefault());
+                if ("APP".equals(sw.getType())) {
+                    initValues.forEach(initValue -> {
+                        if ("1".equals(initValue.getSortOrder())) {
+                            session.setP4ServerMax(initValue.getInitValue());
+                        }
+                    });
+                } else {
+                    initValues.forEach(initValue -> {
+                        if ("2".equals(initValue.getSortOrder())) {
+                            session.setP4ServerMax(initValue.getInitValue());
+                        }
+                    });
+                }
+            }
+        });
+        return sessions;
     }
 
     private static void initSessionLayers(Sw sw) {

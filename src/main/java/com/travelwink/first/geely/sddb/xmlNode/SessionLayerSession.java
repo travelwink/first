@@ -23,7 +23,7 @@ public class SessionLayerSession {
     @JacksonXmlProperty(localName = "P2StarServerMax_default", isAttribute = true)
     private String p2StarServerMax_default = "5000";
 
-    @JacksonXmlProperty(localName = "p4ServerMax_default", isAttribute = true)
+    @JacksonXmlProperty(localName = "P4ServerMax_default", isAttribute = true)
     private String p4ServerMax_default = "400";
 
     @JacksonXmlProperty(localName = "DeltaP2Vehicle_sigleframe", isAttribute = true)

@@ -1,6 +1,7 @@
 package com.travelwink.first.geely.sddb.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.travelwink.first.geely.sddb.entity.InitValue;
 import com.travelwink.first.geely.sddb.xmlNode.Sw;
 import org.apache.ibatis.annotations.Select;
 
@@ -43,4 +44,14 @@ public interface SwMapper extends BaseMapper<Sw> {
                  ORDER BY t100.identifier
                 """)
     List<Sw> getXmlInfo(String projectEcuRelId);
+
+    @Select("SELECT \n " +
+            "    t132.name, t131.init_value\n " +
+            "FROM\n " +
+            "    t131_init_value t131\n " +
+            "        LEFT JOIN\n " +
+            "    t132_init_value_type t132 ON t131.fk_t132_init_value_type_id = t132.id\n " +
+            "WHERE\n " +
+            "    t131.fk_t130_init_id = #{initId} ")
+    List<InitValue> getInitValue(String initId);
 }
