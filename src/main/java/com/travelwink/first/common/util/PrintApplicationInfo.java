@@ -6,10 +6,10 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
- * 打印项目信息
+ * Print project info
  *
- *
- * @author chris*/
+ * @author Chris Liao
+ */
 @Slf4j
 public class PrintApplicationInfo {
 
@@ -73,9 +73,15 @@ public class PrintApplicationInfo {
         log.info("Home:    {}", homeUrl);
         log.info("Knife4j: {}", knife4jUrl);
         log.info("Swagger: {}", swaggerUrl);
-        log.info("spring-boot-plus project start success...........");
-        if ("dev".equals(profileActive)) {
+        log.info("Travel-wink's first project start success...........");
+        if ("dev".equals(profileActive)){
             log.info("\n{}", AnsiUtil.getAnsi(Ansi.Color.BLUE, startSuccess));
+        } else if ("test".equals(profileActive)) {
+            log.info("\n{}", AnsiUtil.getAnsi(Ansi.Color.YELLOW, startSuccess));
+        } else if ("uat".equals(profileActive)) {
+            log.info("\n{}", AnsiUtil.getAnsi(Ansi.Color.MAGENTA, startSuccess));
+        } else if ("prod".equals(profileActive)) {
+            log.info("\n{}", AnsiUtil.getAnsi(Ansi.Color.GREEN, startSuccess));
         } else {
             log.info("\n{}", startSuccess);
         }

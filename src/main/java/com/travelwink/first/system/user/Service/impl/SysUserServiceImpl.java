@@ -27,4 +27,11 @@ public class SysUserServiceImpl implements SysUserService {
         PageInfo<SysUser> userPageInfo = sysUserMapper.selectPageList(page, sysUserPageParam);
         return new Paging<>(userPageInfo);
     }
+
+    @Override
+    public SysUser getDetails(String id) {
+        return null;
+    }
+
+
 }

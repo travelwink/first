@@ -1,6 +1,7 @@
 package com.travelwink.first.common.paginaton;
 
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.util.CollectionUtils;
@@ -17,6 +18,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public abstract class BasePageOrderParam extends BasePageParam {
 
+    @Schema(description = "分页排序字段")
     private List<OrderItem> pageSorts;
 
     public void defaultPageSort(OrderItem orderItem) {

@@ -24,6 +24,11 @@
 | jAnsi             | 2.4.0    | format console print |
 
 ## Develop History
+### 2024-04-12
+- Upgrade version
+- Apply Swagger annotation on sysUserController
+- Apply AnsiUtil
+
 ### 2023-04-10
 - Initialize project
 - Add OpenApi Dependency

@@ -1,6 +1,5 @@
 package com.travelwink.first.system.user.Service;
 
-import com.travelwink.first.common.paginaton.PageInfo;
 import com.travelwink.first.common.paginaton.Paging;
 import com.travelwink.first.system.user.entity.SysUser;
 import com.travelwink.first.system.user.param.SysUserPageParam;
@@ -10,4 +9,6 @@ import com.travelwink.first.system.user.param.SysUserPageParam;
  */
 public interface SysUserService {
     Paging<SysUser> getPageList(SysUserPageParam sysUserPageParam);
+
+    SysUser getDetails(String id);
 }
