@@ -2,6 +2,7 @@ package com.travelwink.first.common.controller.exception;
 
 import com.travelwink.first.common.api.ApiCode;
 import com.travelwink.first.common.api.ApiResp;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @Slf4j
+@Tag(name = "Global Error Controller")
 public class GlobalErrorController implements ErrorController {
 
     private static final String ERROR_PATH = "/error";

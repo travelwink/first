@@ -1,6 +1,7 @@
 package com.travelwink.first.example.controller;
 
 import com.travelwink.first.common.api.ApiResp;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import java.io.IOException;
 @CrossOrigin
 @RestController
 @RequestMapping("/escape")
+@Tag(name = "Example - String escape")
 public class StringEscapeController {
 
     @GetMapping("/input")

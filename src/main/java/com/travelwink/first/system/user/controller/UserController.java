@@ -1,6 +1,7 @@
 package com.travelwink.first.system.user.controller;
 
 import com.travelwink.first.common.api.ApiResp;
+import com.travelwink.first.common.api.ApiResult;
 import com.travelwink.first.common.paginaton.Paging;
 import com.travelwink.first.system.user.Service.SysUserService;
 import com.travelwink.first.system.user.entity.SysUser;
@@ -13,21 +14,32 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * @author chris
  */
 @Slf4j
 @RestController
 @RequestMapping("/sysUser")
-@Tag(name = "系统管理-用户")
+@Tag(name = "System - User")
 public class UserController {
 
     @Autowired
     private SysUserService userService;
 
+    @Autowired
+    private MdSparePartService mdSparePartService;
+
     @PostMapping("/getPageList")
     public ApiResp<Paging<SysUser>> getPageList(@RequestBody SysUserPageParam sysUserPageParam) {
         Paging<SysUser> userPaging = userService.getPageList(sysUserPageParam);
         return ApiResp.ok(userPaging);
+    }
+
+    @PostMapping("/getUserInfo")
+    private ApiResult<List<PubC3dItemRelVo>> getSubPart(@RequestBody SubSparePartParam param) throws Exception {
+        List<PubC3dItemRelVo> relVoList = mdSparePartService.getSubPart(param);
+        return ApiResult.ok(relVoList);
     }
 }

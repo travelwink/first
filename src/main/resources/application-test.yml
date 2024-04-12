@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:mysql://rm-bp14n4vk6o1aw87b8ao.mysql.rds.aliyuncs.com:3306/eis?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+    username: itp_dev
+    password: Qc$AfSUiJPDlEbJm
+
+bos:
+  stsEndpoint : http://sts.endpoint.com
+  accessKeyId : 123
+  accessKeySecret : 456
+  endpoint : https://endpoint.com
+  bucketName : bucketName
+  envPath: dev

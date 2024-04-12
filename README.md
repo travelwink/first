@@ -7,17 +7,18 @@
 ## Base Framework
 | Name        | Version |
 |-------------|---------|
-| Spring boot | 3.0.5   |
+| Spring boot | 3.2.1   |
 | Java        | 17      |
 | Gradle      | 7.6.1   |
 
 ## Dependencies
 | Name              | Version  | Desc                 |
 |-------------------|----------|----------------------|
-| Spring Cloud      | 2022.0.2 | 
+| Spring Cloud      | 2023.0.0 | 
 | Lombok            |          | 
 | OpenFeigns        |          | 
-| mybatis           | 3.0.0    |
+| mybatis           | 3.0.3    |
+| mybatis Plus      | 3.5.5    |
 | mysql-connector-j |          | 
 | openApi           | 2.1.0    | substitute swagger   |
 | jAnsi             | 2.4.0    | format console print |
