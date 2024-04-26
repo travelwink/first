@@ -7,9 +7,9 @@
 ## Base Framework
 | Name        | Version |
 |-------------|---------|
-| Spring boot | 3.2.1   |
+| Spring boot | 3.2.5   |
 | Java        | 17      |
-| Gradle      | 7.6.1   |
+| Gradle      | 7.6.4   |
 
 ## Dependencies
 | Name              | Version  | Desc                 |
