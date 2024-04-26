@@ -4,6 +4,11 @@ server:
     context-path: /api
 
 spring:
+  application:
+    name: first
+  profiles:
+    default: dev
+#    active: @profileActive@
   jackson:
     # Date format string or a fully-qualified date format class name. For instance, 'yyyy-MM-dd HH:mm:ss'
     date-format: "yyyy-MM-dd HH:mm:ss"
@@ -15,11 +20,3 @@ mybatis-plus:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
   mapper-locations: classpath*:mapper/**/*Mapper.xml
-
-bos:
-  stsEndpoint : http://sts.endpoint.com
-  accessKeyId : 123
-  accessKeySecret : 456
-  endpoint : https://endpoint.com
-  bucketName : bucketName
-  envPath: dev

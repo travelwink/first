@@ -8,7 +8,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
- * @author chris
+ * @author Chris Liao
  */
 @SpringBootApplication
 @MapperScan({"com.travelwink.first.*.*.mapper"})
@@ -22,7 +22,6 @@ public class FirstApplication {
 //				.web(WebApplicationType.REACTIVE)
 //				.sources(FirstApplication.class)
 //				.run(args);
-
 		PrintApplicationInfo.print(context);
 	}
 

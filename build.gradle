@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.2.5'
-    id 'io.spring.dependency-management' version '1.1.0'
+    id 'io.spring.dependency-management' version '1.1.4'
 }
 
 group = 'com.travelwink'
@@ -21,8 +21,8 @@ repositories {
 ext {
     set('springCloudVersion', "2023.0.0")
 
-    set('openapiVersion', "2.2.0")
-    set('knife4jVersion', "4.1.0")
+    set('openapiVersion', "2.5.0")
+    set('knife4jVersion', "4.5.0")
 
     set('mybatisVersion', "3.0.3")
     set('mybatisPlusVersion', "3.5.5")
@@ -30,7 +30,7 @@ ext {
     set('junitVersion', "5.9.3")
     set('jansiVersion', "2.4.0")
 
-    set('lombokVersion', "1.18.30")
+    set('lombokVersion', "1.18.32")
 }
 
 dependencies {
@@ -42,7 +42,7 @@ dependencies {
     implementation 'de.codecentric:spring-boot-admin-starter-client:3.2.3'
 
     /** SPRING CLOUD ROUTING */
-    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+//    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.1'
 
     /** MESSAGE FRAMEWORK */
     implementation 'org.springframework.kafka:spring-kafka:3.0.11'
@@ -70,10 +70,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.15.2'
 
     /** 3rd party SDK */
-    implementation('com.baidubce:bce-java-sdk:0.10.285') {
-        exclude(group: 'log4j', module: 'log4j')
-        exclude(group: 'org.slf4j', module: 'slf4j-reload4j')
-    }
+//implementation...
 
     /** DEVELOPER TOOLS */
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
